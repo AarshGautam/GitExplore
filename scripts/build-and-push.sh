@@ -1,16 +1,18 @@
 #!/bin/bash
 set -euo pipefail
+
 FULL_NAME="$DOCKERHUB_USERNAME/$IMAGE:latest"
-# write the key from the environment to a temp file, lock it down
-echo "$EC2_SSH_KEY" > key.pem
-chmod 400 key.pem
-# run the deploy commands on EC2 over SSH
-ssh -o StrictHostKeyChecking=accept-new -i key.pem \
-"$EC2_USER@$EC2_HOST" "
-docker pull $FULL_NAME
-docker stop $CONTAINER 2>/dev/null || true
-docker rm $CONTAINER 2>/dev/null || true
-docker run -d --name $CONTAINER \
---restart always -p $PORT:$PORT $FULL_NAME
-"
-rm -f key.pem # never leave the key lying around
+
+# 1. Log in to Docker Hub
+# (Using --password-stdin is more secure than passing it as an argument)
+echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+
+# 2. Build the Docker image
+# $CONTEXT should be './client' as defined in your YAML
+docker build -t "$FULL_NAME" "$CONTEXT"
+
+# 3. Push the image to Docker Hub
+docker push "$FULL_NAME"
+
+# 4. Log out
+docker logout
