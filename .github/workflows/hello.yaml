@@ -1,6 +1,10 @@
 name: Hello
 
-on: push # run on every push
+# on: push # run on every push
+on:
+  push:
+    branches: [main]
+    paths: ["client/**"] # only when frontend code changes
 
 jobs:
   greet:
