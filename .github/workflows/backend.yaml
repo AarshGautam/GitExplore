@@ -13,10 +13,10 @@ jobs:
           - name: Build and push
             run: bash scripts/build-and-push.sh
             env:
-            DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-            DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-            IMAGE: mern-client # <- different image
-            CONTEXT: ./client # <- different folder
+              DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+              DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+              IMAGE: mern-client # <- different image
+              CONTEXT: ./client # <- different folder
 
   deploy:
     needs: build-and-push
