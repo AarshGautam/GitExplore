@@ -1,4 +1,3 @@
-.github/workflows/hello.yml
 name: Hello
 
 on: push # run on every push
@@ -8,4 +7,4 @@ jobs:
     runs-on: ubuntu-latest # a fresh Linux machine
   steps:
     - name: Say hello
-    run: echo "Hello from GitHub Actions"
+      run: echo "Hello from GitHub Actions"
