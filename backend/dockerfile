@@ -1,9 +1,19 @@
 FROM node:22-alpine
 
-WORKDIR /app
+# 1. Change working directory to a dedicated app folder
+WORKDIR /
 
-COPY . .
+# 2. Copy package files first (better for Docker caching)
+COPY package*.json ./
 
+# 3. Install your dependencies
 RUN npm install
 
+# 4. FIX: Copy the rest of your app source code (including server.js)
+COPY . .
+
+# 5. Expose your port
+EXPOSE 4200
+
+# 6. Start the development server
 CMD ["npm", "run", "dev"]
