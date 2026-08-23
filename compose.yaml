@@ -1,0 +1,54 @@
+services:
+  mongo:
+    image: mongo:latest
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - mern-net
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: dockerfile
+    image: rogaw/todo-repo:back
+    container_name: app-backend
+    restart: unless-stopped
+    working_dir: /app
+    environment:
+      NODE_ENV: development
+      PORT: 4200
+      MONGO_URI: mongodb+srv://${MONGO_URL}.mongodb.net/test
+    depends_on:
+      mongo:
+        condition: service_healthy
+    networks:
+      - mern-net
+    ports:
+      - "4200:4200"
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        # baked into the bundle at build time
+        VITE_API_URL: http://localhost:4200/api
+    image: rogaw/todo-repo:front
+    container_name: app-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    networks:
+      - mern-net
+    ports:
+      - "5173:5173"
+networks:
+  mern-net:
+    driver: bridge
+volumes:
+  mongo_data:
+  mongo_config:

@@ -1,7 +1,7 @@
 FROM node:22-alpine
 
 # 1. Change working directory to a dedicated app folder
-WORKDIR /
+WORKDIR /app
 
 # 2. Copy package files first (better for Docker caching)
 COPY package*.json ./
