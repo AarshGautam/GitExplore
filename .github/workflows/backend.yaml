@@ -28,8 +28,9 @@ jobs:
       - name: Deploy to EC2
         run: bash scripts/deploy.sh
         env:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USER }}
-          IMAGE: todo-repo:back
+          DOCKERHUB_USERNAME: rogaw
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+          IMAGE: todo-repo
           CONTAINER: mern-server
           PORT: 4200
           EC2_HOST: ${{ secrets.EC2_HOST }}
