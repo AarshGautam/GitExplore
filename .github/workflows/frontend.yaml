@@ -1,9 +1,9 @@
-name: Backend CI/CD
+name: Frontend CI/CD
 
 on:
   push:
     branches: [main]
-    paths: ["app/server/**"] # Only trigger on backend changes
+    paths: ["app/client/**"] # Only trigger on frontend changes
 
 jobs:
   # ─────────────────────────────────────
@@ -14,13 +14,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build and Push Backend Image
+      - name: Build and Push Frontend Image
         run: bash scripts/build-and-push.sh
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-          IMAGE: todo-repo:back
-          CONTEXT: ./app/server
+          IMAGE: todo-repo:front
+          CONTEXT: ./app/client
 
   # ─────────────────────────────────────
   # Deploy
@@ -31,14 +31,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Deploy Backend to EC2
+      - name: Deploy Frontend to EC2
         run: bash scripts/deploy.sh
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USER }}
           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-          IMAGE: todo-repo:back
-          CONTAINER: mern-server
-          PORT: 4200
+          IMAGE: todo-repo:front
+          CONTAINER: mern-client
+          PORT: 5173
           EC2_HOST: ${{ secrets.EC2_HOST }}
           EC2_USER: ${{ secrets.EC2_USER }}
           EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
