@@ -5,6 +5,10 @@ on:
     branches: [main]
     paths: ["app/client/**"] # Only trigger on frontend changes
 
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+  
 jobs:
   # ─────────────────────────────────────
   # Build & Push

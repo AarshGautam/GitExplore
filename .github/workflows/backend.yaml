@@ -5,6 +5,10 @@ on:
     branches: [main]
     paths: ["app/server/**"] # Only trigger on backend changes
 
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
 jobs:
   # ─────────────────────────────────────
   # Build & Push
