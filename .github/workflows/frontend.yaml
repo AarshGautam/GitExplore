@@ -5,8 +5,8 @@ on:
     branches:
       - main
     paths:
-      - "frontend/**"
-      - "scripts/**"
+      # - "frontend/**"
+      # - "scripts/**"
       - ".github/workflows/frontend.yml"
 
 permissions:

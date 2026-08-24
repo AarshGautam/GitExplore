@@ -5,8 +5,8 @@ on:
     branches:
       - master
     paths:
-      - "backend/**"
-      - "scripts/**"
+      # - "backend/**"
+      # - "scripts/**"
       - ".github/workflows/backend.yml"
 
 permissions:
@@ -47,4 +47,4 @@ jobs:
           EC2_HOST: ${{ secrets.EC2_HOST }}
           EC2_USER: ${{ secrets.EC2_USER }}
           EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
-          
+
