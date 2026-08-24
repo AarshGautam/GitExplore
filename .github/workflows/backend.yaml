@@ -19,7 +19,7 @@ jobs:
       - name: Build and push Docker image
         run: bash scripts/build-and-push.sh
         env:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USER }}
           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
           IMAGE: todo-repo
           CONTEXT: ./backend
