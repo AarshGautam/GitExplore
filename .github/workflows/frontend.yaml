@@ -2,46 +2,48 @@ name: Frontend CI/CD
 
 on:
   push:
-    branches: [main]
-    paths: ["app/client/**"] # Only trigger on frontend changes
+    branches:
+      - main
+    paths:
+      - "frontend/**"
+      - "scripts/**"
+      - ".github/workflows/frontend.yml"
 
-concurrency:
-  group: ${{ github.workflow }}
-  cancel-in-progress: true
+permissions:
+  contents: read
+
 jobs:
-  # ─────────────────────────────────────
-  # Build & Push
-  # ─────────────────────────────────────
   build-and-push:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
 
-      - name: Build and Push Frontend Image
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build and push frontend
         run: bash scripts/build-and-push.sh
-        env:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-          IMAGE: todo-repo:front
-          CONTEXT: ./app/client
-
-  # ─────────────────────────────────────
-  # Deploy
-  # ─────────────────────────────────────
-  deploy:
-    needs: build-and-push
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Deploy Frontend to EC2
-        run: bash scripts/deploy.sh
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USER }}
           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-          IMAGE: todo-repo:front
-          CONTAINER: mern-client
+          IMAGE: todo-repo
+          CONTEXT: ./frontend
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy frontend to EC2
+        run: bash scripts/deploy.sh
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          IMAGE: todo-repo
+          CONTAINER: todo-front
           PORT: 5173
+          EXTRA_DOCKER_ARGS: ""
           EC2_HOST: ${{ secrets.EC2_HOST }}
           EC2_USER: ${{ secrets.EC2_USER }}
           EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
