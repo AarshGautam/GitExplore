@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - main
+    paths:
+      - "frontend/**"
+      - "scripts/**"
+      - ".github/workflows/frontend.yml"
 
 permissions:
   contents: read
