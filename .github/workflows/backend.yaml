@@ -3,11 +3,7 @@ name: Backend CI/CD
 on:
   push:
     branches:
-      - master
-    paths:
-      # - "backend/**"
-      # - "scripts/**"
-      - ".github/workflows/backend.yml"
+      - main
 
 permissions:
   contents: read
