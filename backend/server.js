@@ -30,6 +30,14 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: 'Server error', error: err.message });
 });
 
+app.get('/api/whoami', (req, res) => {
+  res.json({
+    instance: process.env.INSTANCE_ID,
+    hostname: require('os').hostname(),
+    pid: process.pid
+  });
+});
+
 const PORT = process.env.PORT || 4200;
 app.listen(PORT, () => {
   console.log(`✅ Server running on http://localhost:${PORT}`);

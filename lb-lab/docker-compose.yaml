@@ -1,0 +1,36 @@
+services:
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./client/build:/usr/share/nginx/html:ro
+    depends_on: [api1, api2, api3]
+ 
+  api1: &api
+    build: ../backend/server.js
+    environment:
+      - MONGO_URL=mongodb+srv://aarsh123gautam_db_user:vgXyhTgTPaQSq5tw@cluster0.qwk7d0c.mongodb.net/test
+      - INSTANCE_ID=api1
+    depends_on: [mongo]
+ 
+  api2:
+    <<: *api
+    environment:
+      - MONGO_URL=mongodb+srv://aarsh123gautam_db_user:vgXyhTgTPaQSq5tw@cluster0.qwk7d0c.mongodb.net/test
+      - INSTANCE_ID=api2
+ 
+  api3:
+    <<: *api
+    environment:
+      - MONGO_URL=mongodb+srv://aarsh123gautam_db_user:vgXyhTgTPaQSq5tw@cluster0.qwk7d0c.mongodb.net/test
+      - INSTANCE_ID=api3
+ 
+  mongo:
+    image: mongo:latest
+    volumes:
+      - mongo_data:/data/db
+ 
+volumes:
+  mongo_data:
